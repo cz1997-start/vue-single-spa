@@ -1,0 +1,12 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": "commonjs", //设置ES6 模块转译的模块格式 默认是 commonjs
+        "useBuiltIns": "usage", //按需引入 babel-polyfill
+        "corejs": "2" // 声明corejs版本
+      }
+    ]
+  ]
+}

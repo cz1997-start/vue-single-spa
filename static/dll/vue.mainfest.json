@@ -1,0 +1,1 @@
+{"name":"vue_library","content":{"../node_modules/vue/dist/vue.runtime.esm.js":{"id":144,"buildMeta":{"exportsType":"namespace"},"exports":["default"]},"../node_modules/vue-router/dist/vue-router.esm.js":{"id":345,"buildMeta":{"exportsType":"namespace"},"exports":["default"]}}}
