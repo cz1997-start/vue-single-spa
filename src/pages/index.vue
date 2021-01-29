@@ -6,17 +6,21 @@
   </div>
 </template>
 <script>
+import getTitle from '../utils/index';
+
 export default {
   data() {
     return {};
   },
   created() {
-    console.log(3333);
+    const b = 2222;
+    console.log(b);
     this.testPromise();
+    getTitle();
   },
   methods: {
     testPromise() {
-      new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         console.log(22);
         resolve(1);
       });

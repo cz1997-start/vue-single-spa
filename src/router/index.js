@@ -1,9 +1,9 @@
 export default {
   routes: [
     {
-      path: "",
-      name: "index",
-      component: () => import("../pages/index.vue"),
+      path: '',
+      name: 'index',
+      component: () => import('../pages/index.vue'),
     },
   ],
   scrollBehavior() {
