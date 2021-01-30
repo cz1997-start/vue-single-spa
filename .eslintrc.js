@@ -13,8 +13,20 @@ module.exports = {
   },
   plugins: ['vue'],
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-console': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'linebreak-style': ['error', 'windows'],
+  },
+  settings: {
+    'import/resolver': {
+      // 解决eslint不是吧webpack alias问题
+      alias: {
+        map: [
+          ['@', './src'],
+          ['@utils', './src/utils'],
+        ],
+        extensions: ['.js', '.jsx', '.json', '.vue'],
+      },
+    },
   },
 };

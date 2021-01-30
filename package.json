@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack serve  --config ./config/webpack.dev.js --progress ",
-    "build": "webpack --config ./config/webpack.prod.js --progress",
+    "start": " webpack serve  --config ./config/webpack.dev.js  --progress",
+    "build": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js --progress",
     "build:dll": "webpack --config ./config/webpack.dll.config.js",
-    "analyze": "webpack-bundle-analyzer --port 8888 ./dist/stats.json ",
+    "analyze": "cross-env  npm_config_report=true npm run build",
     "lint": "eslint --ext .js,.vue src",
     "lint:fix": "eslint --ext .js,.vue src --fix"
   },
@@ -23,15 +23,16 @@
     "autoprefixer": "^10.2.3",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
-    "cache-loader": "^4.1.0",
     "clean-webpack-plugin": "^3.0.0",
     "compression-webpack-plugin": "^7.1.2",
     "copy-webpack-plugin": "^7.0.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^5.0.1",
     "css-minimizer-webpack-plugin": "^1.2.0",
     "eslint": "^7.18.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^7.2.0",
+    "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-vue": "^7.5.0",
     "eslint-webpack-plugin": "^2.4.3",
@@ -55,6 +56,7 @@
     "vue-loader": "^15.9.6",
     "vue-template-compiler": "^2.6.12",
     "webpack": "^5.18.0",
+    "webpack-bundle-analyzer": "^4.4.0",
     "webpack-cli": "^4.4.0",
     "webpack-dev-server": "^3.11.2",
     "webpack-merge": "^5.7.3"
@@ -62,8 +64,7 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "vue": "^2.6.12",
-    "vue-router": "^3.5.1",
-    "webpack-bundle-analyzer": "^4.4.0"
+    "vue-router": "^3.5.1"
   },
   "browserslist": [
     "> 1%",

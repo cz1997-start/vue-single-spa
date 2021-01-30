@@ -3,11 +3,11 @@
     8888 <span class="block_text">block_text</span>
     <img src="../assets/pay_logo.png" />
     <img src="../assets/pay_logo.svg" />
+    <button @click="clickHandle">test</button>
   </div>
 </template>
 <script>
-import getTitle from '../utils/index';
-
+// import getTitle from '@utils/index.js';
 export default {
   data() {
     return {};
@@ -16,13 +16,18 @@ export default {
     const b = 2222;
     console.log(b);
     this.testPromise();
-    getTitle();
+    // getTitle();
   },
   methods: {
     testPromise() {
       return new Promise((resolve) => {
         console.log(22);
         resolve(1);
+      });
+    },
+    clickHandle() {
+      import(/* webpackChunkName: 'c' */ '@utils/index.js').then((t) => {
+        t.default();
       });
     },
   },

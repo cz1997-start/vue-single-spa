@@ -7,14 +7,27 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const copyWebpackPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 提取css插件
 
-module.exports = {
+const mode = process.env.NODE_ENV || 'development';
+const isProduction = mode === 'production' ? true : false;
+
+const config = {
   target: 'web', // 不设置为web,热更新无效
   entry: '/src/main.js',
   output: {
     path: path.resolve(__dirname, '../dist'), // 输出位置
-    filename: 'js/[name].[contenthash].js',
+    filename: 'js/[name].[contenthash:8].js',
     chunkFilename: 'js/[contenthash:8].js',
+  },
+  cache: {
+    type: 'filesystem',
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, '../src'),
+      '@utils': path.resolve(__dirname, '../src/utils'),
+    },
   },
   module: {
     rules: [
@@ -25,7 +38,6 @@ module.exports = {
             loader: 'thread-loader',
             // 有同样配置的 loader 会共享一个 worker 池
           },
-          'cache-loader',
           'vue-loader',
         ],
         exclude: /node_modules/,
@@ -38,7 +50,6 @@ module.exports = {
             loader: 'thread-loader',
             // 有同样配置的 loader 会共享一个 worker 池
           },
-          'cache-loader',
           'babel-loader',
         ],
       },
@@ -67,15 +78,36 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.css$/, // 添加解析 .css文件loader
+        use: [
+          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+          'css-loader',
+          'postcss-loader',
+        ],
+      },
+      {
+        test: /\.scss$/, // 添加解析 .scss文件loader
+        use: [
+          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+          'css-loader',
+          'postcss-loader',
+          'sass-loader',
+        ],
+      },
+      {
+        test: /\.less$/, // 添加解析 .less文件loader
+        use: [
+          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+          'css-loader',
+          'postcss-loader',
+          'less-loader',
+        ],
+      },
     ],
   },
   plugins: [
     new VueLoaderPlugin(),
-    new BundleAnalyzerPlugin({
-      // 分析插件
-      analyzerMode: 'disabled', // 不启动展示打包报告的http服务器
-      generateStatsFile: true, // 是否生成stats.json文件
-    }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'public/index.html',
@@ -101,3 +133,17 @@ module.exports = {
     }),
   ],
 };
+
+if (process.env.npm_config_report) {
+  config.plugins.push(new BundleAnalyzerPlugin()); //增加分析插件
+}
+if (isProduction) {
+  config.plugins.push(
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].[contenthash:8].css',
+      chunkFilename: 'css/[name].[contenthash:8].css',
+    }),
+  ); //提取css; //增加分析插件
+}
+
+module.exports = config;
