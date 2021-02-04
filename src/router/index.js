@@ -3,7 +3,12 @@ export default {
     {
       path: '',
       name: 'index',
-      component: () => import('../pages/index.vue'),
+      component: () => import(/* webpackChunkName: 'index' */ '../pages/index.vue'),
+    },
+    {
+      path: '/home',
+      name: 'index',
+      component: () => import(/* webpackChunkName: 'home' */ '../pages/home.vue'),
     },
   ],
   scrollBehavior() {

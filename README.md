@@ -1,6 +1,24 @@
 # 基于webpack5的SPA应用脚手架
 
 
+## 注意
+```
+运行前先执行npm run build:dll，打包动态链接
+```
+## 运行命令
+```
+npm run start
+```
+## 打包命令
+```
+npm run build
+```
+
+## 分析命令
+```
+npm run analyze
+```
+
 ## commit规范
 
 ```
@@ -16,4 +34,9 @@
  test：新增测试用例或是更新现有测试
  revert：回滚某个更早之前的提交
  chore：不属于以上类型的其他类型
+```
+
+## 预提交
+```
+使用了husky进行预提交，预提交前进行eslint检查
 ```

@@ -6,6 +6,7 @@ const CompressionPlugin = require('compression-webpack-plugin'); // 开启gizp�
 const TerserPlugin = require('terser-webpack-plugin'); //压缩js
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin'); //压缩css
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 console.log('---------------production---------------');
 
@@ -18,7 +19,6 @@ module.exports = merge(base, {
   },
   optimization: {
     splitChunks: {
-      chunks: 'all',
       minSize: 0,
       minRemainingSize: 0,
       minChunks: 1,
@@ -27,9 +27,17 @@ module.exports = merge(base, {
       enforceSizeThreshold: 50000,
       cacheGroups: {
         vendor: {
-          // 提取第三方包,防止和业务代码混淆
+          name: `chunk-vendors`,
           test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
+          priority: -10,
+          chunks: 'initial',
+        },
+        common: {
+          name: `chunk-common`,
+          minChunks: 2,
+          priority: -20,
+          chunks: 'initial',
+          reuseExistingChunk: true,
         },
       },
     },
@@ -55,5 +63,6 @@ module.exports = merge(base, {
       threshold: 8192, // 仅处理大于8k的文件
     }), //开启gzip压缩
     new CleanWebpackPlugin(), // 删除上次构建的文件
+    new FriendlyErrorsWebpackPlugin(),
   ],
 });

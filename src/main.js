@@ -7,6 +7,10 @@ Vue.use(Router);
 
 const router = new Router(routes);
 
+import(/* webpackChunkName: 'c' */ '@utils/index.js').then((t) => {
+  t.default();
+});
+
 /* eslint-disable no-new */
 new Vue({
   router,

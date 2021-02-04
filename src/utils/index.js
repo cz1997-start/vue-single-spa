@@ -1,3 +1,5 @@
 export default function getTitle() {
-  console.log('title');
+  console.log(
+    'titletitletitletitletitletitletitletitletitletitletitletitletitletitletitletitletitle',
+  );
 }

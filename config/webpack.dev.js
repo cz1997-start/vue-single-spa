@@ -2,8 +2,10 @@ const path = require('path');
 const base = require('./webpack.base');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 console.log('---------------development---------------');
-module.exports = merge(base, {
+
+const config = {
   mode: 'development',
   devtool: 'eval-source-map',
   stats: 'errors-only',
@@ -23,4 +25,12 @@ module.exports = merge(base, {
     }),
     new webpack.HotModuleReplacementPlugin(), //热更新替换插件
   ],
-});
+};
+config.plugins.push(
+  new FriendlyErrorsWebpackPlugin({
+    compilationSuccessInfo: {
+      messages: [`Your application is running here: http://localhost:${config.devServer.port}`],
+    },
+  }),
+);
+module.exports = merge(base, config);

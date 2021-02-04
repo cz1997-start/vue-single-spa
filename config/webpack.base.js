@@ -6,7 +6,6 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin'); // 解析vue必须的�
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; //分析插件
 const copyWebpackPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 提取css插件
 
 const mode = process.env.NODE_ENV || 'development';
@@ -18,7 +17,7 @@ const config = {
   output: {
     path: path.resolve(__dirname, '../dist'), // 输出位置
     filename: 'js/[name].[contenthash:8].js',
-    chunkFilename: 'js/[contenthash:8].js',
+    chunkFilename: 'js/[name].[contenthash:8].js',
   },
   cache: {
     type: 'filesystem',
@@ -41,17 +40,6 @@ const config = {
           'vue-loader',
         ],
         exclude: /node_modules/,
-      },
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: 'thread-loader',
-            // 有同样配置的 loader 会共享一个 worker 池
-          },
-          'babel-loader',
-        ],
       },
       {
         test: /\.(png|jpg|gif)$/,
@@ -104,6 +92,17 @@ const config = {
           'less-loader',
         ],
       },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'thread-loader',
+            // 有同样配置的 loader 会共享一个 worker 池
+          },
+          'babel-loader',
+        ],
+      },
     ],
   },
   plugins: [
@@ -111,7 +110,7 @@ const config = {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'public/index.html',
-      inject: 'body', // 生成的js脚本放在body底部
+      // inject: 'body', // 生成的js脚本放在body底部
     }), // 生成模板
     // 获取动态链接
     new webpack.DllReferencePlugin({
@@ -127,7 +126,6 @@ const config = {
         },
       ],
     }),
-    new FriendlyErrorsWebpackPlugin(),
     new ESLintPlugin({
       extensions: ['.js', '.jsx', '.vue'],
     }),
