@@ -112,11 +112,6 @@ const config = {
       template: 'public/index.html',
       // inject: 'body', // 生成的js脚本放在body底部
     }), // 生成模板
-    // 获取动态链接
-    new webpack.DllReferencePlugin({
-      context: __dirname,
-      manifest: path.resolve(__dirname, '../static/dll', 'vue.mainfest.json'),
-    }),
     // 拷贝资源到指定目录
     new copyWebpackPlugin({
       patterns: [
