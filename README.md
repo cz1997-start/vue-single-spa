@@ -1,10 +1,7 @@
 # 基于webpack5的SPA应用脚手架
 
 
-## 注意
-```
-运行前先执行npm run build:dll，打包动态链接
-```
+
 ## 运行命令
 ```
 npm run start
