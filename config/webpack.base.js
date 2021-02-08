@@ -1,10 +1,8 @@
 const path = require('path');
-const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const svgToMiniDataURI = require('mini-svg-data-uri');
 const { VueLoaderPlugin } = require('vue-loader'); // 解析vue必须的插件
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; //分析插件
-const copyWebpackPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 提取css插件
 
@@ -137,16 +135,6 @@ const config = {
       template: 'public/index.html',
       // inject: 'body', // 生成的js脚本放在body底部
     }), // 生成模板
-    // 拷贝资源到指定目录
-    new copyWebpackPlugin({
-      patterns: [
-        {
-          from: path.resolve(__dirname, '../public'), // 打包的静态资源目录地址
-          to: path.resolve(__dirname, '../dist'), // 打包到dist下面
-          toType: 'dir',
-        },
-      ],
-    }),
     new ESLintPlugin({
       context: path.resolve(__dirname, '../src'),
       extensions: ['.js', '.jsx', '.vue'],

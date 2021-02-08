@@ -3,6 +3,7 @@ const base = require('./webpack.base');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const copyWebpackPlugin = require('copy-webpack-plugin');
 const SpeedMeasurePlugin = require('speed-measure-webpack5-plugin');
 const smp = new SpeedMeasurePlugin();
 const speed = process.env.SPEED;
@@ -41,6 +42,19 @@ config = merge(base, config);
 // 分析打包速度插件
 if (speed === 'open') {
   config = smp.wrap(config);
+} else {
+  config.push([
+    // 拷贝资源到指定目录
+    new copyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, '../public'), // 打包的静态资源目录地址
+          to: path.resolve(__dirname, '../dist'), // 打包到dist下面
+          toType: 'dir',
+        },
+      ],
+    }),
+  ]);
 }
 
 module.exports = config;

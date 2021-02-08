@@ -8,8 +8,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin'); //压缩css
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const SpeedMeasurePlugin = require('speed-measure-webpack5-plugin');
-const smp = new SpeedMeasurePlugin();
-const speed = process.env.SPEED;
+const copyWebpackPlugin = require('copy-webpack-plugin');
 const gizp = process.env.GZIP;
 
 console.log('---------------production---------------');
@@ -66,6 +65,15 @@ let config = merge(base, {
 
     new CleanWebpackPlugin(), // 删除上次构建的文件
     new FriendlyErrorsWebpackPlugin(),
+    new copyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, '../public'), // 打包的静态资源目录地址
+          to: path.resolve(__dirname, '../dist'), // 打包到dist下面
+          toType: 'dir',
+        },
+      ],
+    }),
   ],
 });
 
@@ -76,11 +84,6 @@ if (gizp === 'open') {
       threshold: 8192, // 仅处理大于8k的文件
     }), //开启gzip压缩
   );
-}
-
-// 分析打包速度插件
-if (speed === 'open') {
-  config = smp.wrap(config);
 }
 
 module.exports = config;
