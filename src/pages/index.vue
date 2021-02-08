@@ -25,11 +25,7 @@ export default {
         resolve(1);
       });
     },
-    clickHandle() {
-      import(/* webpackChunkName: 'c' */ '@utils/index.js').then((t) => {
-        t.default();
-      });
-    },
+    clickHandle() {},
   },
 };
 </script>

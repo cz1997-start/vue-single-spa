@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const svgToMiniDataURI = require('mini-svg-data-uri');
-const VueLoaderPlugin = require('vue-loader/lib/plugin'); // 解析vue必须的插件
+const { VueLoaderPlugin } = require('vue-loader'); // 解析vue必须的插件
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; //分析插件
 const copyWebpackPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
@@ -26,9 +26,11 @@ const config = {
     alias: {
       '@': path.resolve(__dirname, '../src'),
       '@utils': path.resolve(__dirname, '../src/utils'),
+      vue$: 'vue/dist/vue.runtime.esm-bundler.js',
     },
   },
   module: {
+    noParse: /^(vue|vue-router|vuex)$/,
     rules: [
       {
         test: /\.vue$/, // 添加解析 .vue文件loader
@@ -39,7 +41,7 @@ const config = {
           },
           'vue-loader',
         ],
-        exclude: /node_modules/,
+        include: path.resolve(__dirname, '../src'), // 只处理src目录下的文件
       },
       {
         test: /\.(png|jpg|gif)$/,
@@ -53,6 +55,7 @@ const config = {
             },
           },
         ],
+        include: path.resolve(__dirname, '../src'), // 只处理src目录下的文件
       },
       {
         test: /\.svg$/,
@@ -65,6 +68,25 @@ const config = {
             },
           },
         ],
+        include: path.resolve(__dirname, '../src'), // 只处理src目录下的文件
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/i,
+        use: [
+          /* config.module.rule('fonts').use('url-loader') */
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 4096,
+              fallback: {
+                loader: 'file-loader',
+                options: {
+                  name: 'fonts/[name].[hash:8].[ext]',
+                },
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.css$/, // 添加解析 .css文件loader
@@ -73,6 +95,7 @@ const config = {
           'css-loader',
           'postcss-loader',
         ],
+        include: path.resolve(__dirname, '../src'), // 只处理src目录下的文件
       },
       {
         test: /\.scss$/, // 添加解析 .scss文件loader
@@ -82,6 +105,7 @@ const config = {
           'postcss-loader',
           'sass-loader',
         ],
+        include: path.resolve(__dirname, '../src'), // 只处理src目录下的文件
       },
       {
         test: /\.less$/, // 添加解析 .less文件loader
@@ -91,10 +115,10 @@ const config = {
           'postcss-loader',
           'less-loader',
         ],
+        include: path.resolve(__dirname, '../src'), // 只处理src目录下的文件
       },
       {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
+        test: /\.js?$/,
         use: [
           {
             loader: 'thread-loader',
@@ -102,6 +126,7 @@ const config = {
           },
           'babel-loader',
         ],
+        include: path.resolve(__dirname, '../src'), // 只处理src目录下的文件
       },
     ],
   },
@@ -116,13 +141,16 @@ const config = {
     new copyWebpackPlugin({
       patterns: [
         {
-          from: path.resolve(__dirname, '../static'), // 打包的静态资源目录地址
-          to: 'static', // 打包到dist下面的static
+          from: path.resolve(__dirname, '../public'), // 打包的静态资源目录地址
+          to: path.resolve(__dirname, '../dist'), // 打包到dist下面
+          toType: 'dir',
         },
       ],
     }),
     new ESLintPlugin({
+      context: path.resolve(__dirname, '../src'),
       extensions: ['.js', '.jsx', '.vue'],
+      threads: true,
     }),
   ],
 };

@@ -3,9 +3,12 @@ const base = require('./webpack.base');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const SpeedMeasurePlugin = require('speed-measure-webpack5-plugin');
+const smp = new SpeedMeasurePlugin();
+const speed = process.env.SPEED;
 console.log('---------------development---------------');
 
-const config = {
+let config = {
   mode: 'development',
   devtool: 'eval-source-map',
   stats: 'errors-only',
@@ -33,4 +36,11 @@ config.plugins.push(
     },
   }),
 );
-module.exports = merge(base, config);
+config = merge(base, config);
+
+// 分析打包速度插件
+if (speed === 'open') {
+  config = smp.wrap(config);
+}
+
+module.exports = config;

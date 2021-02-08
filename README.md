@@ -1,4 +1,4 @@
-# 基于webpack5的SPA应用脚手架
+# 基于webpack5和vue3的SPA应用脚手架
 
 
 

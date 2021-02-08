@@ -7,10 +7,14 @@ const TerserPlugin = require('terser-webpack-plugin'); //压缩js
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin'); //压缩css
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const SpeedMeasurePlugin = require('speed-measure-webpack5-plugin');
+const smp = new SpeedMeasurePlugin();
+const speed = process.env.SPEED;
+const gizp = process.env.GZIP;
 
 console.log('---------------production---------------');
 
-module.exports = merge(base, {
+let config = merge(base, {
   mode: 'production',
   stats: {
     preset: 'errors-only',
@@ -59,10 +63,24 @@ module.exports = merge(base, {
         ? JSON.stringify(process.env.NODE_ENV)
         : JSON.stringify('production'),
     }),
-    new CompressionPlugin({
-      threshold: 8192, // 仅处理大于8k的文件
-    }), //开启gzip压缩
+
     new CleanWebpackPlugin(), // 删除上次构建的文件
     new FriendlyErrorsWebpackPlugin(),
   ],
 });
+
+// 开启gzip
+if (gizp === 'open') {
+  config.plugins.push(
+    new CompressionPlugin({
+      threshold: 8192, // 仅处理大于8k的文件
+    }), //开启gzip压缩
+  );
+}
+
+// 分析打包速度插件
+if (speed === 'open') {
+  config = smp.wrap(config);
+}
+
+module.exports = config;

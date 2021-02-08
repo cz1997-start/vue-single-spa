@@ -8,5 +8,6 @@
         "corejs": "2" // 声明corejs版本
       }
     ]
-  ]
+  ],
+  "plugins": ["@babel/plugin-syntax-dynamic-import"]
 }

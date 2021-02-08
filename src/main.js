@@ -1,19 +1,9 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import { createApp } from 'vue';
 import App from './App.vue';
-import routes from './router/index';
-
-Vue.use(Router);
-
-const router = new Router(routes);
+import router from './router/index';
+import store from './store/index';
 
 import(/* webpackChunkName: 'c' */ '@utils/index.js').then((t) => {
   t.default();
 });
-
-/* eslint-disable no-new */
-new Vue({
-  router,
-  el: '#app',
-  render: (h) => h(App),
-});
+createApp(App).use(store).use(router).mount('#app');
